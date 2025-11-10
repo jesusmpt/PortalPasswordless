@@ -30,7 +30,7 @@ jobs:
       # Instalar dependencias de frontend
       - name: Install Dependencies
         working-directory: ./frontend
-        run: npm ci
+        run: npm install
 
       # Construir la app con Vite
       - name: Build Frontend
