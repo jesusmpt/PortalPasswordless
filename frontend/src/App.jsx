@@ -1,4 +1,5 @@
-﻿import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
+
 function App() {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -62,5 +63,3 @@ function App() {
 }
 
 export default App;
-
-
