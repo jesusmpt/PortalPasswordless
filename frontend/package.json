@@ -1,18 +1,17 @@
-﻿{
+{
   "name": "portal-passwordless",
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "start": "npx vite",
-    "build": "npx vite build"
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
   },
   "dependencies": {
-    "@azure/msal-browser": "^3.6.0",
-    "@azure/msal-react": "^2.0.12",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
-    "vite": "^4.0.0"
+    "vite": "^5.0.0"
   }
 }
