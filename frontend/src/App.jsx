@@ -1,95 +1,66 @@
 ﻿import React, { useEffect, useState } from "react";
-import { PublicClientApplication, InteractionType } from "@azure/msal-browser";
-import { MsalProvider, useMsal, useIsAuthenticated } from "@azure/msal-react";
-
-const msalConfig = {
-  auth: {
-    clientId: "8dcec823-8928-41f7-a9b5-e85db1dc6c12",
-    authority: "https://login.microsoftonline.com/9ff87f7c-8358-46b5-88bc-d73c09ce789f",
-    redirectUri: window.location.origin,
-  },
-};
-
-const msalInstance = new PublicClientApplication(msalConfig);
-
-function Dashboard() {
-  const { instance, accounts } = useMsal();
-  const [methods, setMethods] = useState([]);
-  const [status, setStatus] = useState("Cargando métodos...");
-
-  useEffect(() => {
-    const getAuthMethods = async () => {
-      try {
-        const account = accounts[0];
-        const response = await instance.acquireTokenSilent({
-          scopes: ["UserAuthenticationMethod.Read.All"],
-          account,
-        });
-
-        const res = await fetch("/api/auth-methods", {
-          headers: { Authorization: Bearer  },
-        });
-
-        const data = await res.json();
-        setMethods(data.methods);
-
-        const hasPasswordless =
-          data.methods.includes("Microsoft Authenticator") ||
-          data.methods.includes("FIDO2") ||
-          data.methods.includes("Windows Hello");
-
-        setStatus(
-          hasPasswordless
-            ? "? Tu cuenta ya es passwordless."
-            : "?? Aún tienes métodos basados en contraseña. Vamos a ayudarte a migrar."
-        );
-      } catch (err) {
-        console.error(err);
-        setStatus("Error al obtener los métodos de autenticación.");
-      }
-    };
-
-    getAuthMethods();
-  }, [instance, accounts]);
-
-  return (
-    <div style={{ padding: "2rem" }}>
-      <h1>Portal Passwordless</h1>
-      <p>{status}</p>
-      <ul>
-        {methods.map((m, i) => (
-          <li key={i}>{m}</li>
-        ))}
-      </ul>
-      <button onClick={() => instance.logoutRedirect()}>Cerrar sesión</button>
-    </div>
-  );
-}
-
 function App() {
-  const { instance } = useMsal();
-  const isAuthenticated = useIsAuthenticated();
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  const handleLogin = () => {
-    instance.loginRedirect({
-      scopes: ["openid", "profile", "email", "UserAuthenticationMethod.Read.All"],
-    });
+  const fetchData = () => {
+    setLoading(true);
+    fetch("/api/methods")
+      .then((res) => res.json())
+      .then((json) => setData(json))
+      .finally(() => setLoading(false));
   };
 
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  if (loading) return <p>Cargando...</p>;
+  if (!data) return <p>Error al obtener información</p>;
+
+  const { user, availableMethods, missingPasswordless } = data;
+
   return (
-    <div style={{ textAlign: "center", marginTop: "4rem" }}>
-      <h1>Bienvenido al portal Passwordless</h1>
-      <p>Si llegaste aquí, ya estás autenticado con Entra ID.</p>
-      <button onClick={() => (window.location.href = "/logout")}>Logout</button>
+    <div style={{ padding: "20px", fontFamily: "Arial" }}>
+      <h1>Portal Passwordless</h1>
+      <h2>Información del usuario:</h2>
+      <ul>
+        <li>Nombre: {user.givenName} {user.surname}</li>
+        <li>Correo: {user.mail || user.userPrincipalName}</li>
+      </ul>
+
+      <h2>Métodos de autenticación configurados:</h2>
+      <ul>
+        {availableMethods.map((m, i) => (
+          <li key={i}>
+            {m.displayName || m.type} {m.phoneNumber ? `- ${m.phoneNumber}` : ""}
+          </li>
+        ))}
+      </ul>
+
+      {missingPasswordless.length > 0 ? (
+        <>
+          <h2>Para habilitar passwordless necesitas:</h2>
+          <ul>
+            {missingPasswordless.map((m, i) => (
+              <li key={i}>{m}</li>
+            ))}
+          </ul>
+        </>
+      ) : (
+        <p>¡Ya tienes passwordless configurado!</p>
+      )}
+
+      <button onClick={fetchData} style={{ marginTop: "20px" }}>
+        Volver a comprobar
+      </button>
+      <button onClick={() => (window.location.href = "/logout")} style={{ marginLeft: "10px" }}>
+        Logout
+      </button>
     </div>
   );
 }
 
-export default function WrapperApp() {
-  return (
-    <MsalProvider instance={msalInstance}>
-      <App />
-    </MsalProvider>
-  );
-}
+export default App;
+
 
