@@ -3,5 +3,6 @@ import react from '@vitejs/plugin-react';
 
 export default defineConfig({
   plugins: [react()],
-  base: './'  // IMPORTANTE para Azure SWA
+    root: './',   // raíz de frontend
+    base: './'    // para rutas relativas
 });
