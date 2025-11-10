@@ -1,21 +1,12 @@
 ﻿<!DOCTYPE html>
 <html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <title>Portal Passwordless</title>
-  <style>
-    body { font-family: Arial, sans-serif; text-align: center; background: #f3f6fb; color: #333; margin-top: 10%; }
-    h1 { color: #0366d6; }
-    .btn { background-color: #0366d6; color: white; padding: 12px 20px; text-decoration: none; border-radius: 6px; display: inline-block; margin-top: 20px; }
-    .btn:hover { background-color: #024d9e; }
-    #methods { margin-top: 40px; text-align: left; display: inline-block; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
-  </style>
-</head>
-<body>
-  <h1>Portal de Identidad Passwordless</h1>
-  <p>Bienvenido. Este portal te ayudará a convertir tu cuenta en passwordless.</p>
-  <a href="/.auth/login/aad" class="btn">Iniciar sesión con Entra ID</a>
-  <div id="methods"></div>
-  <script src="app.js"></script>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Portal Passwordless</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/App.jsx"></script>
+  </body>
 </html>
