@@ -1,7 +1,7 @@
 {
   "navigationFallback": {
     "rewrite": "/index.html",
-    "exclude": ["/api/*"]
+    "exclude": ["/api/*", "/.auth/*"]
   },
   "auth": {
     "identityProviders": {
@@ -40,3 +40,4 @@
     }
   }
 }
+
