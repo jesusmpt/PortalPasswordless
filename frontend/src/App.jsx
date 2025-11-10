@@ -78,14 +78,9 @@ function App() {
 
   return (
     <div style={{ textAlign: "center", marginTop: "4rem" }}>
-      {isAuthenticated ? (
-        <Dashboard />
-      ) : (
-        <>
-          <h1>Bienvenido al portal Passwordless</h1>
-          <button onClick={handleLogin}>Iniciar sesión con Entra ID</button>
-        </>
-      )}
+      <h1>Bienvenido al portal Passwordless</h1>
+      <p>Si llegaste aquí, ya estás autenticado con Entra ID.</p>
+      <button onClick={() => (window.location.href = "/logout")}>Logout</button>
     </div>
   );
 }
@@ -97,3 +92,4 @@ export default function WrapperApp() {
     </MsalProvider>
   );
 }
+
