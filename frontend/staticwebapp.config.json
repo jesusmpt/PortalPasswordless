@@ -1,0 +1,10 @@
+﻿{
+  "navigationFallback": {
+    "rewrite": "/index.html",
+    "exclude": ["/api/*"]
+  },
+  "routes": [
+    { "route": "/logout", "redirect": "/.auth/logout" },
+    { "route": "/login", "redirect": "/.auth/login/aad" }
+  ]
+}
