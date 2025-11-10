@@ -4,7 +4,7 @@ import { MsalProvider, useMsal, useIsAuthenticated } from "@azure/msal-react";
 
 const msalConfig = {
   auth: {
-    clientId: "TU_CLIENT_ID_ENTRAID",
+    clientId: "8dcec823-8928-41f7-a9b5-e85db1dc6c12",
     authority: "https://login.microsoftonline.com/TU_TENANT_ID",
     redirectUri: window.location.origin,
   },
